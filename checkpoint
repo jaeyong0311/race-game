@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class checkpoint : MonoBehaviour
+{
+    public bool car1 = false; 
+    public bool car2 = false; 
+    private void OnTriggerEnter(Collider other)
+    {
+
+        if (other.CompareTag("car1"))
+        {
+            car1 = true;
+            Debug.Log("Car number one has reached the checkpoint");
+        }
+        else if (other.CompareTag("car2"))
+        {
+            car2 = true;
+            Debug.Log("Car number two has reached the checkpoint");
+        }
+    }
+}
