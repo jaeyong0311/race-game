@@ -1,0 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+public class ScoreManager : MonoBehaviour
+{
+    public static ScoreManager instance;
+    public static int playerScore = 0; 
+    public TMP_Text txt;
+    private void Awake()
+    {
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
+    public static void AddScore(int value)
+    {
+        playerScore += value;
+        Debug.Log("Player Score: " + playerScore);
+        MoneyView.instance.GetComponent<TMP_Text>().text = playerScore.ToString() + " $";
+    }
+}
