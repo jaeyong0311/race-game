@@ -1,0 +1,81 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine.Windows;
+using System.IO;
+
+public class RANKING : MonoBehaviour
+
+{
+    public Button sendButton;
+    public TMP_Text[] rankingText;
+
+    private static List<PlayerScore> ranking = new List<PlayerScore>();
+
+private void Start()
+    {
+        ReadRankingAll();
+        UpdateRankingText();
+    }
+
+    private void UpdateRankingText()
+    {
+        string text = "";
+        for (int i = 0; i < ranking.Count && i < rankingText.Length; i++)
+        {
+            text = $"{i + 1}. {ranking[i].name}: {ranking[i].score}\n";
+            rankingText[i].text = text;
+        }
+    }
+
+    public static void AddToRanking(string playerName, int playerScore)
+    {
+        print(playerName);
+        if (!string.IsNullOrEmpty(playerName))
+        {
+            ranking.Add(new PlayerScore(playerName, playerScore));
+            ranking.Sort((x, y) => y.score.CompareTo(x.score)); // ������ �������� ������������ ��
+        }
+        else
+        {
+            Debug.LogWarning("�̸��� �Է��ϼ���.");
+        }
+    }
+
+    public static void AddToRankingFile(string playerName, int score)
+    {
+        StreamWriter writer = (System.IO.File.Exists("ranking.txt")) ? System.IO.File.AppendText("ranking.txt") : System.IO.File.CreateText("ranking.txt");
+       
+        writer.WriteLine(playerName);
+        writer.WriteLine(score);
+        writer.Close();
+    }
+
+    public void ReadRankingAll()
+    {
+        string s = System.IO.File.ReadAllText("ranking.txt");
+        string[] data = s.Split("\n");
+        print(data[0]);
+        
+        for(int i = 0; i < data.Length-2; i++)
+        {
+            print((int)data[i][data[i].Length - 1]);
+            data[i]  = data[i].Replace((char)13, ' ');
+            print(data[i]);
+            AddToRanking(data[i++], int.Parse(data[i]));
+        }
+    }
+}
+public class PlayerScore
+{
+    public string name;
+    public int score;
+
+    public PlayerScore(string name, int score)
+    {
+        this.name = name;
+        this.score = score;
+    }
+}
