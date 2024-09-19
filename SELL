@@ -1,0 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class Shop : MonoBehaviour
+{
+    public int[] itemPrices = { 3,000,000, 3,500,000, 4,000,000, 7,000,000, 10,000,000 };
+    public int playerMoney = 0; 
+
+    public void BuyItem(int itemIndex)
+    {
+        int price = itemPrices[itemIndex];
+
+        if (ScoreManager.playerScore >= price)
+        {
+            ScoreManager.AddScore(-price);
+            Debug.Log("��ǰ�� �����߽��ϴ�. ���� ��: " + playerMoney);
+        }
+        else
+        {
+            Debug.Log("���� �����մϴ�!");
+        }
+    }
+}
