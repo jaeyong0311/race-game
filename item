@@ -1,0 +1,59 @@
+using System.Collections;
+using System.Collections.Generic;
+using GearFactory;
+using UnityEngine;
+
+public class Item : MonoBehaviour
+{
+    public ItemType type;
+    public ScoreManager scoreManager; // ���� ���� �Ŵ���
+    public static Item instance;
+    public enum ItemType
+    {
+        Goldcoin,
+        SilverCoin,
+        BronzeCoin,
+        Gear
+    }
+    public static int gear = 0;
+
+    private void IncreaseSpeed(float amount)
+    {
+        Car carController = FindObjectOfType<Car>();
+        if (carController != null)
+        {
+            carController.IncreaseSpeed(amount);
+        }
+        else
+        {
+            Debug.LogError("CarController�� ã�� �� �����ϴ�.");
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("car1")) // �÷��̾�� �浹���� ��
+        {
+            ScoreManager.AddScore(ScoreManager.playerScore);
+
+            switch (type)
+            {
+                case ItemType.Goldcoin:
+                    ScoreManager.AddScore (10000000); // GoldCoin�� ������ 10,000,000�� ������ ����ϴ�.
+                    break;
+                case ItemType.SilverCoin:
+                    ScoreManager.AddScore (5000000); // SilverCoin�� ������ 5,000,000�� ������ ����ϴ�.
+                    break;
+                case ItemType.BronzeCoin:
+                    ScoreManager.AddScore (1000000); // BronzeCoin�� ������ 1,000,000�� ������ ����ϴ�.
+                    break;
+                case ItemType.Gear:
+                    gear++;
+                    break;
+                default:
+                    break;
+            }
+            Destroy(gameObject); // ������ ����
+        }
+    }
+}
