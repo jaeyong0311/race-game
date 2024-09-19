@@ -1,0 +1,92 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Car : MonoBehaviour
+{
+    public GameObject store;
+    public float speed = 10.0f;
+    private float v;
+
+    public float originalMoveSpeed; // 원래 속도
+    public float currentMoveSpeed;  // 현재 속도
+
+    public void IncreaseSpeed(float amount)
+    {
+        speed += amount;
+    }
+
+    private void Start()
+    {
+        {
+            Invoke("MoveCar", 5f);
+            enabled = false;
+        }
+
+        // 초기화할 때 원래 속도를 현재 속도로 설정합니다.
+        currentMoveSpeed = originalMoveSpeed;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Wall")) // "Wall" 태그를 가진 콜라이더에 충돌했을 때
+        {
+            currentMoveSpeed = 0.5f;
+        }
+        else// "Wall" 태그를 가진 콜라이더와의 충돌이 해제되었을 때
+        {
+            currentMoveSpeed = originalMoveSpeed;
+        }
+    }
+    void MoveCar()
+    {
+        // 자동차를 이동
+        enabled = true;
+    }
+    void Update()
+    {
+        if (Item.gear > 0 && (Input.GetKey(KeyCode.B)))
+        {
+            store.SetActive(!store.activeSelf);
+        }
+        // 앞뒤 입력값을 받아서 선언
+        v = Input.GetAxis("Vertical");
+
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
+            this.transform.Translate(Vector3.forward * speed * currentMoveSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
+            this.transform.Translate(Vector3.back * speed * currentMoveSpeed * Time.deltaTime);
+        }
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            // 전진인지 후진인지에 따라 회전 방향을 설정
+            if (v >= 0)
+            {
+                // 전진일때
+                this.transform.Rotate(0, -speed * currentMoveSpeed * 10 * Time.deltaTime, 0);
+            }
+            else
+            {
+                // 후진일때
+                this.transform.Rotate(0, speed * currentMoveSpeed * 10 * Time.deltaTime, 0);
+            }
+        }
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            {
+                if (v >= 0)
+                {
+                    // 전진일때
+                    this.transform.Rotate(0, speed * currentMoveSpeed * 10 * Time.deltaTime, 0);
+                }
+                else
+                {
+                    // 후진일때
+                    this.transform.Rotate(0, -speed * currentMoveSpeed * 10 * Time.deltaTime, 0);
+                }
+            }
+        }
+    }
+}
