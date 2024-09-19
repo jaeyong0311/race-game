@@ -1,0 +1,51 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class LineCounter : MonoBehaviour
+{
+    public int Linecount = 2; // 종료되어야 하는 최대 라인 수
+    public int car1LineCount = 0; // 첫 번째 차량이 밟은 라인 수
+    public int car2LineCount = 0; // 두 번째 차량이 밟은 라인 수
+    public GameManager gameManager;
+
+    // 충돌이 시작할 때 호출되는 함수
+    private void OnTriggerEnter(Collider other)
+    {
+        {
+            // 결승점 라인을 밟은 경우, 체크포인트를 밟은 상태여야 합니다.
+            if (other.CompareTag("car1"))
+            {
+                car1LineCount++;
+                Debug.Log("car1 현재 라인 카운트: " + car1LineCount);
+            }
+            else if (other.CompareTag("car2"))
+            {
+                car2LineCount++;
+                Debug.Log("car2 현재 라인 카운트: " + car2LineCount);
+            }
+
+            // 게임 종료 조건 확인
+            CheckGameEnd();
+        }
+    }
+
+    
+    // 게임 종료 조건을 확인하는 함수
+    private void CheckGameEnd()
+    {
+
+        if (car1LineCount >= Linecount)
+        {
+            Debug.Log("car1 " + Linecount + "번의 라인을 밟아 게임이 종료됩니다!");
+            Time.timeScale = 0f;
+            gameManager.EndGame();
+        }
+        else if (car2LineCount >= Linecount)
+        {
+            Debug.Log("car2 " + Linecount + "번의 라인을 밟아 게임이 종료됩니다!");
+            Time.timeScale = 0f;
+            gameManager.EndGame();
+        }
+    }
+}
