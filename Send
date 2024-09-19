@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement;
+using System.IO;
+
+public class Send : MonoBehaviour
+{
+    public GameObject gameOverUI;
+    public TMP_InputField inputField;
+
+    void Start()
+    {
+        gameOverUI.SetActive(false);
+    }
+    public void EndGame()
+    {
+        Debug.Assert(gameOverUI != null);
+        gameOverUI.SetActive(true);
+
+        string playerName = inputField.text;
+        int playerScore = ScoreManager.playerScore;
+        ScoreManager.playerScore = 0;
+
+        RANKING.AddToRankingFile(playerName, playerScore);
+
+        SceneManager.LoadScene(2);
+    }
+}
