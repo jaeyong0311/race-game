@@ -1,0 +1,67 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class RestartGame : MonoBehaviour
+{
+    private bool isGamePaused = false;
+    public static bool isFree;
+    public static string s;
+    void Update()
+    {
+
+        // F3 키 입력을 감지하여 게임 재시작
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            ReloadScene();
+        }
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            // 스테이지 이동 메서드 호출
+            s = SceneManager.GetActiveScene().name;
+            if (s.Equals("Stage1"))
+            {
+                SceneManager.LoadScene("Stage2");
+            }
+            if(s.Equals("Stage2"))
+            {
+                SceneManager.LoadScene("Stage3");
+            }
+            if (s.Equals("Stage3"))
+            {
+                SceneManager.LoadScene("Stage1");
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            TogglePause();
+        }
+    }
+    void TogglePause()
+    {
+        isGamePaused = !isGamePaused;
+
+        if (isGamePaused)
+        {
+            PauseGame();
+        }
+        else
+        {
+            ResumeGame();
+        }
+    }
+    void PauseGame()
+    {
+        Time.timeScale = 0f; // 시간을 멈추어 게임을 일시 정지
+    }
+
+    void ResumeGame()
+    {
+        Time.timeScale = 1f; // 시간을 다시 흐르게하여 게임 재개
+    }
+
+    void ReloadScene()
+    {
+        // 현재 씬을 다시 로드
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+}
