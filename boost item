@@ -1,0 +1,28 @@
+using OpenCover.Framework.Model;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor;
+using UnityEngine;
+
+public class BoosterItem : MonoBehaviour
+{
+
+    public bool AA;
+    public Car booster;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("car1"))
+        {
+            booster.speed = (AA) ? 20.5f : 40.5f;
+            Invoke("Boosterdone", 1f);
+        }
+    }
+    
+    private void Boosterdone()
+    {
+        booster.speed = 10f;
+        Destroy(gameObject);
+    }
+}
